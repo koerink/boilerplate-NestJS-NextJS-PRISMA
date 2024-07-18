@@ -1,14 +1,14 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
-import { DashboardService } from '../services/dashboard.service';
-import { Dashboard as DashboardModel } from '@prisma/client';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Post, Body, Get, Param } from "@nestjs/common";
+import { DashboardService } from "../services/dashboard.service";
+import { Dashboard as DashboardModel } from "@prisma/client";
+import { ApiTags } from "@nestjs/swagger";
 
-@ApiTags('Dashboard')
-@Controller('Dashboard')
+@ApiTags("Dashboard")
+@Controller("Dashboard")
 export class DashboardController {
   constructor(private readonly DashboardService: DashboardService) {}
 
-  @Post('dashboard')
+  @Post("dashboard")
   async createAccount(
     @Body()
     accoutData: {
@@ -21,12 +21,12 @@ export class DashboardController {
     return this.DashboardService.createDashboard(accoutData);
   }
 
-  @Get('dashboard/:id')
-  async getAccountById(@Param('id') id: string): Promise<DashboardModel> {
+  @Get("dashboard/:id")
+  async getAccountById(@Param("id") id: string): Promise<DashboardModel> {
     return this.DashboardService.getDashboard(id);
   }
 
-  @Get('dashboard/')
+  @Get("dashboard/")
   async getAccounts(): Promise<DashboardModel[]> {
     return this.DashboardService.getDashboards();
   }

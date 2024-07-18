@@ -1,12 +1,12 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
-import { GroupService } from '../services/group.service';
-import { Group as GroupModel } from '@prisma/client';
+import { Controller, Post, Body, Get, Param } from "@nestjs/common";
+import { GroupService } from "../services/group.service";
+import { Group as GroupModel } from "@prisma/client";
 
-@Controller('Group')
+@Controller("Group")
 export class GroupController {
   constructor(private readonly GroupService: GroupService) {}
 
-  @Post('profile')
+  @Post("profile")
   async createProfile(
     @Body()
     profileData: {
@@ -19,12 +19,12 @@ export class GroupController {
     return this.GroupService.createGroup(profileData);
   }
 
-  @Get('profile/:id')
-  async getProfileById(@Param('id') id: string): Promise<GroupModel> {
+  @Get("profile/:id")
+  async getProfileById(@Param("id") id: string): Promise<GroupModel> {
     return this.GroupService.getGroup(id);
   }
 
-  @Get('profile/')
+  @Get("profile/")
   async getProfiles(): Promise<GroupModel[]> {
     return this.GroupService.getGroups();
   }
