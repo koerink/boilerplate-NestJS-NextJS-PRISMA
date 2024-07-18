@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {   
+    provider = "mongodb"   
+    url = env("DATABASE_URL") 
+}
+
+model Account {  
+    id                String    @id @default(auto()) @map("_id") @db.ObjectId  
+    username          String    @unique  
+    email             String    @unique
+    password          String
+    groupId           String    @db.ObjectId
+    profileId         String    @db.ObjectId @unique
+    CreateDateColumn  DateTime  @default(now())
+    UpdateDateColumn  DateTime  @updatedAt 
+}
+
+model Group {  @id
+    id                String    @id @default(auto()) @map("_id") @db.ObjectId  
+    name              String    @unique  
+    CreateDateColumn  DateTime  @default(now())
+    UpdateDateColumn  DateTime  @updatedAt
+}
+
+model Profile {  
+    id                String    @id @default(auto()) @map("_id") @db.ObjectId  
+    bio               String?  
+    avatarUrl         String?  
+    accountId         String    @db.ObjectId @unique
+    CreateDateColumn  DateTime  @default(now())
+    UpdateDateColumn  DateTime  @updatedAt
+}
+
+model Dashboard {  
+    id                String    @id @default(auto()) @map("_id") @db.ObjectId  
+    title             String    @unique 
+    url               String    @unique 
+    kibanaId          String    @db.ObjectId @unique
+    groupId           String    @db.ObjectId
+    CreateDateColumn  DateTime  @default(now())
+    UpdateDateColumn  DateTime  @updatedAt 
+}
