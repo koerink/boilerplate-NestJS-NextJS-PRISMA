@@ -8,6 +8,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator prismaClassGenerator {
+  provider = "prisma-class-generator"
+}
+
 datasource db {   
     provider = "mongodb"   
     url = env("DATABASE_URL") 
@@ -15,37 +19,24 @@ datasource db {
 
 model Account {  
     id                String    @id @default(auto()) @map("_id") @db.ObjectId  
+    version           Int       @default(1)
     username          String    @unique  
     email             String    @unique
+    emailVerified     Boolean   @default(false)  
     password          String
-    groupId           String    @db.ObjectId
-    profileId         String    @db.ObjectId @unique
+    roleId            String     @db.ObjectId @unique
+    role              Role       @relation(fields: [roleId], references: [id])
+    profile           String[]
     CreateDateColumn  DateTime  @default(now())
     UpdateDateColumn  DateTime  @updatedAt 
 }
 
-model Group {  @id
+model Role{
     id                String    @id @default(auto()) @map("_id") @db.ObjectId  
-    name              String    @unique  
+    version           Int       @default(1) 
+    name              String    @unique
+    role              String[]
+    account           Account?  
     CreateDateColumn  DateTime  @default(now())
     UpdateDateColumn  DateTime  @updatedAt
-}
-
-model Profile {  
-    id                String    @id @default(auto()) @map("_id") @db.ObjectId  
-    bio               String?  
-    avatarUrl         String?  
-    accountId         String    @db.ObjectId @unique
-    CreateDateColumn  DateTime  @default(now())
-    UpdateDateColumn  DateTime  @updatedAt
-}
-
-model Dashboard {  
-    id                String    @id @default(auto()) @map("_id") @db.ObjectId  
-    title             String    @unique 
-    url               String    @unique 
-    kibanaId          String    @db.ObjectId @unique
-    groupId           String    @db.ObjectId
-    CreateDateColumn  DateTime  @default(now())
-    UpdateDateColumn  DateTime  @updatedAt 
 }

@@ -1,22 +1,25 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
-import { Account as AccountModel } from '@prisma/client';
-import { AccountDto } from 'src/dto/account.dto';
-import { encrypt } from 'src/utils/encryptor';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "../prisma.service";
+import { Account as AccountModel } from "@prisma/client";
 
 @Injectable()
 export class AccountService {
   constructor(private prisma: PrismaService) {}
 
-  async createAccount(accountDto: AccountDto) {
-    const hashPassword = await encrypt.encryptPassword(accountDto.password);
-    accountDto.password = hashPassword;
-    const result = await this.prisma.account.create({ data: accountDto });
+  async createAccount(account): Promise<AccountModel> {
+    const result = await this.prisma.account.create({ data: account });
     return result;
   }
 
   async getAccount(id: string): Promise<AccountModel> {
     return this.prisma.account.findUnique({ where: { id } });
+  }
+
+  async getAccountByEmail(email: string): Promise<AccountModel> {
+    return this.prisma.account.findUnique({
+      where: { email },
+      include: { role: true },
+    });
   }
 
   async getAccounts(): Promise<AccountModel[]> {

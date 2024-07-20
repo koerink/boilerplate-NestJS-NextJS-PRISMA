@@ -1,8 +1,8 @@
-import jwt from 'jsonwebtoken';
-import * as bcrypt from 'bcrypt';
-import { AccountDto } from 'src/dto/account.dto';
+import jwt from "jsonwebtoken";
+import * as bcrypt from "bcrypt";
+import { AccountDto } from "src/models/account.dto";
 
-const { JWT_SECRET = '' } = process.env;
+const { JWT_SECRET = "" } = process.env;
 
 export class encrypt {
   static async encryptPassword(password: string) {
@@ -11,6 +11,6 @@ export class encrypt {
   }
 
   static generateToken(payload: AccountDto) {
-    return jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
+    return jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
   }
 }

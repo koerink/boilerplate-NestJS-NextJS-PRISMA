@@ -2,9 +2,6 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class AccountDto {
   @ApiProperty()
-  readonly id: string;
-
-  @ApiProperty()
   readonly username: string;
 
   @ApiProperty()
@@ -14,10 +11,10 @@ export class AccountDto {
   password: string;
 
   @ApiProperty()
-  readonly groupId: string;
+  readonly profile: string[];
 
   @ApiProperty()
-  readonly profileId: string;
+  roleId: string;
 
   @ApiProperty()
   readonly CreateDateColumn: Date;
