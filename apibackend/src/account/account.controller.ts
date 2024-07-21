@@ -1,10 +1,12 @@
-import { Controller, Post, Body, Get, Param } from "@nestjs/common";
-import { AccountService } from "../services/account.service";
-import { RoleService } from "src/services/role.service";
+import { Controller, Post, Body, Get, Param, UseGuards } from "@nestjs/common";
+import { AccountService } from "./account.service";
+import { RoleService } from "src/role/role.service";
 import { encrypt } from "../utils/encryptor";
 import { Account as AccountModel } from "@prisma/client";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AccountDto } from "src/models/account.dto";
+import { LoginDto } from "src/models/login.dto";
+import { AuthGuard } from "src/guard/auth.guard";
 
 @ApiTags("Account")
 @Controller("account")
@@ -13,6 +15,27 @@ export class AccountController {
     private readonly accountService: AccountService,
     private readonly roleService: RoleService,
   ) {}
+
+  @Post("login")
+  @ApiResponse({
+    status: 200,
+    description: "OK",
+  })
+  async login(@Body() loginDto: LoginDto) {
+    const account = await this.accountService.login(loginDto.email);
+    const passwordMatch = await encrypt.comparePassword(
+      loginDto.password,
+      account.password,
+    );
+    if (account) {
+      if (passwordMatch) {
+        const token = await encrypt.generateToken(account);
+        return { token };
+      }
+    }
+
+    return { message: "Invalid email or password" };
+  }
 
   @Post()
   @ApiResponse({
@@ -34,18 +57,13 @@ export class AccountController {
     return returnValue;
   }
 
+  @UseGuards(AuthGuard)
   @Get("/:id")
   async getAccountById(@Param("id") id: string): Promise<AccountModel> {
     return this.accountService.getAccount(id);
   }
 
-  @Get("email/:email")
-  async getAccountByEmail(
-    @Param("email") email: string,
-  ): Promise<AccountModel> {
-    return this.accountService.getAccountByEmail(email);
-  }
-
+  @UseGuards(AuthGuard)
   @Get()
   async getAccounts(): Promise<AccountModel[]> {
     return this.accountService.getAccounts();
