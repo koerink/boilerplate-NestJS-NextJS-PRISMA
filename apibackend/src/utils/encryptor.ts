@@ -1,6 +1,6 @@
 import * as jwt from "jsonwebtoken";
 import * as bcrypt from "bcrypt";
-import { AccountroleDto } from "src/models/accountrole.dto";
+import { jwtDto } from "src/models/jwt.dto";
 
 const { JWT_SECRET = "" } = process.env;
 
@@ -13,19 +13,9 @@ export class encrypt {
     return bcrypt.compare(password, hash);
   }
 
-  static async generateToken(payload: AccountroleDto) {
-    delete payload.id;
-    delete payload.password;
-    delete payload.username;
-    delete payload.profile;
-    delete payload.emailVerified;
-    delete payload.role.id;
-    delete payload.role.name;
-    delete payload.role.CreateDateColumn;
-    delete payload.role.UpdateDateColumn;
-    delete payload.CreateDateColumn;
-    delete payload.UpdateDateColumn;
-    const signPayload = await jwt.sign(payload, JWT_SECRET, {
+  static async generateToken(payload: jwtDto) {
+    const plainPayload = JSON.parse(JSON.stringify(payload));
+    const signPayload = await jwt.sign(plainPayload, JWT_SECRET, {
       expiresIn: "1h",
     });
     console.log(signPayload);

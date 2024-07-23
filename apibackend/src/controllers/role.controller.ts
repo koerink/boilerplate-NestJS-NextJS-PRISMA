@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Get, Param } from "@nestjs/common";
-import { RoleService } from "src/role/role.service";
+import { RoleService } from "src/services/role.service";
 import { Role as RoleModel } from "@prisma/client";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { RoleDto } from "src/models/role.dto";

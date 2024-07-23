@@ -16,6 +16,7 @@ export class AccountroleDto {
 
   role: {
     id: string;
+    version: number;
     name: string;
     role: string[];
     CreateDateColumn: Date;

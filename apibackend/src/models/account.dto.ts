@@ -11,7 +11,7 @@ export class AccountDto {
   password: string;
 
   @ApiProperty()
-  readonly profile: string[];
+  profile: string[];
 
   @ApiProperty()
   roleId: string;
@@ -21,4 +21,48 @@ export class AccountDto {
 
   @ApiProperty()
   readonly UpdateDateColumn: Date;
+}
+
+export class AccountregisterDto {
+  constructor(
+    version: number,
+    username: string,
+    email: string,
+    password: string,
+    roleId: string,
+  ) {
+    this.version = version;
+    this.username = username;
+    this.email = email;
+    this.password = password;
+    this.roleId = roleId;
+  }
+  @ApiProperty()
+  version: number;
+
+  @ApiProperty()
+  username: string;
+
+  @ApiProperty()
+  email: string;
+
+  @ApiProperty()
+  password: string;
+
+  @ApiProperty()
+  roleId: string;
+
+  @ApiProperty()
+  profile: string[];
+}
+
+export class RegisterDto {
+  @ApiProperty()
+  username: string;
+
+  @ApiProperty()
+  email: string;
+
+  @ApiProperty()
+  password: string;
 }
